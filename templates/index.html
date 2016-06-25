@@ -1,0 +1,755 @@
+<!doctype html>
+<html>
+<head>
+    <title>Loop Detector Analytics</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+    <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+    <script src="{{ url_for('static', filename='script.js')}}"></script>
+    <link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='style.css')}}" />
+    <link href='https://fonts.googleapis.com/css?family=Raleway:400,500,600,700' rel='stylesheet' type='text/css'>
+    <script src="https://www.amcharts.com/lib/3/amcharts.js"></script>
+    <script src="https://www.amcharts.com/lib/3/serial.js"></script>
+    <script src="https://www.amcharts.com/lib/3/themes/light.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.1/jquery.datetimepicker.js"/ >
+    <script src="https://cdn.jsdelivr.net/jquery.ui.timepicker.addon/1.4.5/jquery-ui-timepicker-addon.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/jquery.ui.timepicker.addon/1.4.5/jquery-ui-timepicker-addon.min.css" />
+    <script src="https://cdn.jsdelivr.net/jquery.ui.timepicker.addon/1.4.5/jquery-ui-sliderAccess.js"></script>
+    <link type="text/css" rel="stylesheet" href="https://cdn.jsdelivr.net/jquery.ui.timepicker.addon/1.4.5/jquery-ui-timepicker-addon.css" />
+    <script src="https://cdn.jsdelivr.net/jquery.ui.timepicker.addon/1.4.5/jquery-ui-timepicker-addon.js"></script>
+
+</head>
+
+<body>
+	<div class = "header">
+        <div class="title">
+			<h1>Loop Detector Analytics</h1>
+      	</div>
+	</div>
+    <div class="content" style="display: show;">
+        <div class = "selection">
+            <h2>Choose Your Analytics</h2>
+            <div class="buttons">
+                <a class="btn blue" id="api_show">Basic APIs</a>
+                <a class="btn red" id="en_show">Entry Count/Volume</a>
+                <a class="btn green" id="ex_show">Exit Count/Volume</a>
+                <a class="btn purple" id="rx_show">Generate missing data</a>
+            <!--<a class="btn orange">Orange Button</a>
+                <a class="btn yellow">Yellow Button</a>-->
+            </div>
+        </div>
+        
+        <div class="boxborder" id="api" style="display: none;">
+                <h2>Basic APIs</h2>
+                <div>
+                    <h3>Single Date API Query</h3>
+                    <input class="btn red timepicker" id="api_onetime_time1">
+                    <input class="btn green" type="button" id="api_onetime_go" value="Go">
+                </div>
+                <div>
+                    <h3>Range Date API Query</h3>
+                    <input class="btn yellow timepicker" id="api_twotime_time1">
+                    <input class="btn blue timepicker" id="api_twotime_time2">
+                    <input class="btn green" type="button" id="api_twotime_go" value="Go">
+                </div>
+        </div>
+
+        <div class="boxborder" id="en_analytics" style="display: none;">
+                <h2>Entry Analytics</h2>
+                <div class="div_left">
+                    <h3>Select Entry Point</h3>
+                    <div class="div_inline"><input class="btn blue"id="en_input"></div>
+                    <div class="div_inline">
+                        <select class = "btn red" id="en_select">
+                            <option value="1">400: Exit 25 S</option>
+                            <option value="2">400: Exit 25 N</option>
+                            <option value="3">401: Exit 351</option>l
+                            <option value="4">401: Exit 352</option>
+                            <option value="5">401: Exit 354</option>
+                            <option value="6">401: Exit 356</option>
+                            <option value="7">401: Exit 357</option>
+                            <option value="8">401: Exit 359 W</option>l
+                            <option value="9">401: Exit 359 E</option>
+                            <option value="10">401: Exit 362</option>
+                            <option value="11">401: Exit 366</option>
+                            <option value="12">401: Exit 367</option>
+                            <option value="13">401: Exit 369</option>l
+                            <option value="14">401: Exit 371 E</option>
+                            <option value="15">401: Exit 371 W</option>
+                            <option value="16">401: Exit 373</option>
+                            <option value="17">401: Exit 375</option>
+                            <option value="18">401: Exit 376</option>l
+                            <option value="19">401: Exit 379 E</option>
+                            <option value="20">401: Exit 379 W</option>
+                            <option value="21">401: Exit 383</option>
+                            <option value="22">401: Exit 387</option>
+                            <option value="23">401: Exit 389</option>l
+                            <option value="24">401: Exit 392</option>
+                            <option value="25">404: Exit 20</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="div_mid">
+                    <h3>Frequency</h3>
+                    <select class = "btn purple" id="en_freq">
+                        <option value="Hourly">Hourly</option>
+                        <option value="Daily">Daily</option>
+                        <option value="Weekly">Weekly</option>
+                        <option value="Monthly">Monthly</option>
+                    </select>
+                </div>
+                <div class="div_right">
+                    <h3>Select range of dates</h3>
+                    <input class="btn orange datepicker" style="width: 120px;" id="en_date1"> to <input class="btn yellow datepicker" style="width: 120px;" id="en_date2">
+                    <input class="btn green" type="button" id="en_go" value="Go">
+                </div>
+
+        </div>
+
+        <div class="boxborder" id="rx_analytics" style="display: none;">
+                <h2>Generate Missing Data Analytics</h2>
+                <div class="div_left">
+                    <h3>Enter Street</h3>
+                    <div class="div_inline"><input class="btn blue" id="rx_input"></div>
+                    <div class="div_inline">
+                        <select class = "btn red" id="rx_select">
+<option value="1">16TH MILE CREEK         :QEWDE0251DES</option>
+<option value="2">16TH MILE CREEK         :QEWDE0251DWS</option>
+<option value="3">400NB - FINCH EAST:400DN0010DER</option>
+<option value="4">400NB - Langstaff:400DN0080DER</option>
+<option value="5">400 N - Hwy 7:400DN0050DER</option>
+<option value="6">400 N. to Steeles:400DN0040DER</option>
+<option value="7">400SB - Hwy 7:400DN0080DWR</option>
+<option value="8">401EB - MORNINGSIDE:401DE1030DSR</option>
+<option value="9">401EB - PROGRESS:401DE0820DSR</option>
+<option value="10">401WB EXP-403WB EXP RAMP:410DW0030DSR</option>
+<option value="11">401WB-KINGSTON ROAD:401DE1210DNR</option>
+<option value="12">403-401EB EXP RAMP:410DW0010DER</option>
+<option value="13">403EB-QEW NB            :403DN0020DSR</option>
+<option value="14">403EB-QEWSB             :403DN0010DER</option>
+<option value="15">403 WB AT FREEMAN       :403DN0030DWF</option>
+<option value="16">404NB - HWY 7:404DN0090DER</option>
+<option value="17">404NB - SHEPPARD:404DN0010DER</option>
+<option value="18">404NB - WOODBINE/STEELES:404DN0060DNR</option>
+<option value="19">404SB - FINCH:404DN0050DWR</option>
+<option value="20">404SB HOV TUNNEL:401DE0530DSR</option>
+<option value="21">404SB - HWY 7:404DN0110DWR</option>
+<option value="22">404 SB - STEELES:404DN0090DWR</option>
+<option value="23">410NB - 401EB COL:410DW0020DNR</option>
+<option value="24">410NB:410DW0050DNR</option>
+<option value="25">410SB-401EB COL RAMP:410DW0010DSR</option>
+<option value="26">ALLEN RD - 401WE:401DE0210DWR</option>
+<option value="27">ALLEN RD N OF 401:401DE0010DSA</option>
+<option value="28">ALLEN RD N OF 401:401DE0020DNA</option>
+<option value="29">APPLEBY LINE            :QEWDE0091DWS</option>
+<option value="30">AT BASKETWEAVE:401DW0140DEC</option>
+<option value="31">AT BASKETWEAVE:401DW0230DEE</option>
+<option value="32">AT BEACH BLVD           :QEWDS0080DNS</option>
+<option value="33">AT BRANT                :QEWDE0010DES</option>
+<option value="34">AT BRIMLEY:401DE0310DWC</option>
+<option value="35">AT BURLINGTON ST.       :QEWDS0100DSS</option>
+<option value="36">AT DIXIE:401DW0160DWC</option>
+<option value="37">AT DIXIE:401DW0180DEC</option>
+<option value="38">AT EGLINTON:410DW0030DSE</option>
+<option value="39">AT EGLINTON:410DW0080DNR</option>
+<option value="40">At Finch:400DN0060DNS</option>
+<option value="41">At Finch:400DN0070DSS</option>
+<option value="42">AT GRAYS ROAD           :QEWDS0150DNS</option>
+<option value="43">AT HWY 403/410:401DW0210DEC</option>
+<option value="44">AT HWY 427              :QEWDE0550DES</option>
+<option value="45">At Hwy 7:400DN0020DNC</option>
+<option value="46">At hwy 7:400DN0020DSE</option>
+<option value="47">At hwy 7:400DN0030DSC</option>
+<option value="48">AT KEELE:401DE0010DEC</option>
+<option value="49">AT KENNEDY:401DE0280DWC</option>
+<option value="50">AT KENNEDY:401DE0290DWC</option>
+<option value="51">At Langstaff:400DN0050DSE</option>
+<option value="52">At Langstaff:400DN0120DNS</option>
+<option value="53">AT MARKHAM:401DE0350DEC</option>
+<option value="54">AT MARKHAM:401DE0360DEE</option>
+<option value="55">AT MATHESON:410DW0010DSE</option>
+<option value="56">AT MATHESON:410DW0020DNE</option>
+<option value="57">AT McCOWAN:401DE0330DEE</option>
+<option value="58">AT MCNICOLL:404DN0040DNS</option>
+<option value="59">AT MEADOWVALE:401DE0190DET</option>
+<option value="60">AT MEADOWVALE:401DE0450DEC</option>
+<option value="61">AT MEADOWVALE:401DE0470DEE</option>
+<option value="62">AT MIDLAND:401DE0300DWC</option>
+<option value="63">AT MILLEN ROAD          :QEWDS0160DSS</option>
+<option value="64">AT MORNINGSIDE:401DE0420DEC</option>
+<option value="65">AT MORNINGSIDE:401DE0430DEE</option>
+<option value="66">AT NEILSON:401DE0160DWT</option>
+<option value="67">AT NEILSON:401DE0370DWE</option>
+<option value="68">AT NEILSON:401DE0380DEC</option>
+<option value="69">AT NEILSON:401DE0390DEE</option>
+<option value="70">AT PED. OVERPASS        :QEWDE0510DWS</option>
+<option value="71">AT PLAINS RD.           :QEWDN0030DSS</option>
+<option value="72">AT QEW or 403 SPLIT        :QEWDE0310DES</option>
+<option value="73">AT RENFORTH:401DW0200DEE</option>
+<option value="74">At Sheppard:400DN0030DNS</option>
+<option value="75">AT SHEPPARD:404DN0010DNE</option>
+<option value="76">AT TOMKEN:401DW0200DEC</option>
+<option value="77">AT TOMKEN:401DW0290DEE</option>
+<option value="78">AT TRANSFER:401DW0120DWC</option>
+<option value="79">AT TRANSFER:401DW0220DWE</option>
+<option value="80">AT WINSTON CHURCHILL    :QEWDE0350DWS</option>
+<option value="81">AT YONGE:401DE0130DEC</option>
+<option value="82">BEACH BLVD - QEW NB     :QEWDS0030DNR</option>
+<option value="83">BRIMLEY NB - 401 WB:401DE0840DWR</option>
+<option value="84">BROCK:401DE0260DWT</option>
+<option value="85">BROCK:401DE0570DWE</option>
+<option value="86">BROCK ROAD:401DE0590DEC</option>
+<option value="87">BROCK ROAD:401DE0610DEE</option>
+<option value="88">BURLINGTON - QEW NB     :QEWDS0040DNR</option>
+<option value="89">BURLOAK DRIVE           :QEWDE0121DES</option>
+<option value="90">BURL ST - RED HILL EXPWY:QEWDS0065DWR</option>
+<option value="91">CAWTHRA SB - QEW WB     :QEWDE0280DWR</option>
+<option value="92">CN RAIL:401DE0530DWC</option>
+<option value="93">CN RAIL:401DE0530DWE</option>
+<option value="94">CN RAIL:401DE0560DEC</option>
+<option value="95">CN RAIL:401DE0580DEE</option>
+<option value="96">COLLINS:401DE0410DWC</option>
+<option value="97">E 401 - DVP S:401DE0580DSR</option>
+<option value="98">E 401 - DVP S:401DE0590DSR</option>
+<option value="99">E 401 - Hwy 404 N:401DE0570DNR</option>
+<option value="100">E 401 - Leslie S:401DE0480DSR</option>
+<option value="101">E 401 - YONGE ST.:401DE0400DNR</option>
+<option value="102">EAST OF 3RD LINE        :QEWDE0201DES</option>
+<option value="103">EAST OF 3RD LINE        :QEWDE0201DWS</option>
+<option value="104">EAST OF APPLEBY         :QEWDE0101DES</option>
+<option value="105">EAST OF APPLEBY         :QEWDE0111DES</option>
+<option value="106">EAST OF APPLEBY         :QEWDE0111DWS</option>
+<option value="107">EAST OF BRONTE          :QEWDE0181DWS</option>
+<option value="108">EAST OF BURLOAK         :QEWDE0131DWS</option>
+<option value="109">EAST OF BURLOAK         :QEWDE0141DWS</option>
+<option value="110">EAST OF BURLOAK         :QEWDE0151DWS</option>
+<option value="111">EAST OF DORVAL          :QEWDE0241DES</option>
+<option value="112">EAST OF GUELPH LINE     :QEWDE0041DES</option>
+<option value="113">EAST OF GUELPH LINE     :QEWDE0041DWS</option>
+<option value="114">EAST OF GUELPH LINE     :QEWDE0051DES</option>
+<option value="115">EAST OF GUELPH LINE     :QEWDE0051DWS</option>
+<option value="116">EAST OF TRAFALGAR       :QEWDE0280DES</option>
+<option value="117">EAST OF WALKERS         :QEWDE0071DES</option>
+<option value="118">EAST OF WALKERS         :QEWDE0071DWS</option>
+<option value="119">EAST OF WALKERS         :QEWDE0081DES</option>
+<option value="120">EAST OF WALKERS         :QEWDE0081DWS</option>
+<option value="121">EB 401-BROCK:401DE1330DSR</option>
+<option value="122">EB401 EXP/COL-404 EXP:401DE0575DNR</option>
+<option value="123">EB401 EXP-NB404 EXP:401DE0560DNR</option>
+<option value="124">EB401-KINGSTON ROAD:401DE1150DSR</option>
+<option value="125">EB401-WHITES:401DE1230DSR</option>
+<option value="126">EB HWY2A-401EB:401DE1170DER</option>
+<option value="127">E. EGLINTON - HWY 401 W.:401DW0390DWR</option>
+<option value="128">E. EGLINTON - HWY 427 N.:401DW0040DNR</option>
+<option value="129">E. HWY 401- CARLINGVIEW:401DW0350DNR</option>
+<option value="130">E. HWY 401- HWY 427 S.:401DW0340DSR</option>
+<option value="131">E OF 400:401DW0030DEE</option>
+<option value="132">E OF 400:401DW0040DEC</option>
+<option value="133">E OF 400:401DW0040DEE</option>
+<option value="134">E OF 400:401DW0040DWC</option>
+<option value="135">E OF ALLEN RD:401DE0060DEE</option>
+<option value="136">E OF ALLEN ROAD:401DE0070DEC</option>
+<option value="137">E OF ALLEN ROAD:401DE0070DEE</option>
+<option value="138">E. OF APPLEBY LINE      :QEWDE0110DES</option>
+<option value="139">E OF AVENUE RD:401DE0030DET</option>
+<option value="140">E OF AVENUE ROAD:401DE0110DEC</option>
+<option value="141">E OF AVENUE ROAD:401DE0110DEE</option>
+<option value="142">E OF BASKET WEAVE:401DW0010DWC</option>
+<option value="143">E OF BASKET WEAVE:401DW0010DWE</option>
+<option value="144">E of Bayview:401DE0050DET</option>
+<option value="145">E of Bayview:401DE0160DWC</option>
+<option value="146">E of Bayview:401DE0170DEC</option>
+<option value="147">E of Bayview:401DE0170DEE</option>
+<option value="148">E of Bayview:401DE0180DEC</option>
+<option value="149">E OF Bayview:401DE0180DEE</option>
+<option value="150">e of Bayview:401DE0190DEC</option>
+<option value="151">E of Bayview:401DE0190DEE</option>
+<option value="152">E. OF BIRCHMOUNT:401DE0280DEC</option>
+<option value="153">E OF BIRCHMOUNT:401DE0280DEE</option>
+<option value="154">E. OF BRIMLEY:401DE0320DEC</option>
+<option value="155">E. OF BRIMLEY:401DE0320DEE</option>
+<option value="156">E. OF BRONTE            :QEWDE0180DES</option>
+<option value="157">E. OF COLLINS:401DE0430DEC</option>
+<option value="158">E. OF COLLINS:401DE0450DEE</option>
+<option value="159">E. OF CREDIT RIVER      :QEWDE0450DWS</option>
+<option value="160">E. OF DIXIE:401DW0160DEC</option>
+<option value="161">E. OF DIXIE:401DW0170DEC</option>
+<option value="162">E. OF DIXIE:401DW0260DEE</option>
+<option value="163">E of Don Mills:401DE0220DEC</option>
+<option value="164">E of Don Mills:401DE0220DEE</option>
+<option value="165">E OF DUFFERIN:401DE0030DWC</option>
+<option value="166">E OF DVP:401DE0655DER</option>
+<option value="167">E. OF ETOBICOKE CREEK:401DW0130DEC</option>
+<option value="168">E. OF ETOBICOKE CREEK:401DW0130DWC</option>
+<option value="169">E. OF ETOBICOKE CREEK:401DW0220DEE</option>
+<option value="170">E. OF ETOBICOKE CREEK:401DW0230DWE</option>
+<option value="171">E OF HWY27:401DW0050DES</option>
+<option value="172">E OF HWY 27:401DW0060DWS</option>
+<option value="173">E of Hwy 404/DVP:401DE0230DEC</option>
+<option value="174">E of Hwy 404/DVP:401DE0230DEE</option>
+<option value="175">E OF ISLINGTON:401DW0080DWC</option>
+<option value="176">E OF ISLINGTON:401DW0090DEE</option>
+<option value="177">E OF JANE:401DW0010DWT</option>
+<option value="178">E OF JANE:401DW0020DEC</option>
+<option value="179">E OF KEELE:401DE0020DWC</option>
+<option value="180">E OF KEELE:401DE0030DWE</option>
+<option value="181">E. OF KENNEDY:401DE0300DEC</option>
+<option value="182">E. OF LIVERPOOL:401DE0580DEC</option>
+<option value="183">E. OF LIVERPOOL:401DE0600DEE</option>
+<option value="184">E. OF MARKHAM:401DE0150DET</option>
+<option value="185">E. OF MARKHAM:401DE0370DEC</option>
+<option value="186">E. OF MARKHAM:401DE0370DEE</option>
+<option value="187">E. OF MARKHAM:401DE0380DEE</option>
+<option value="188">E OF MARTINGROVE:401DW0020DES</option>
+<option value="189">E OF MARTINGROVE:401DW0030DES</option>
+<option value="190">E OF MARTINGROVE:401DW0040DWS</option>
+<option value="191">E. OF MCCOWAN:401DE0330DEC</option>
+<option value="192">E. OF MCCOWAN:401DE0340DEC</option>
+<option value="193">E. OF MCCOWAN:401DE0340DEE</option>
+<option value="194">E. OF MCCOWAN:401DE0350DEE</option>
+<option value="195">E. OF MEADOWVALE:401DE0460DEC</option>
+<option value="196">E. OF MEADOWVALE:401DE0480DEE</option>
+<option value="197">E. OF MIDLAND:401DE0310DEE</option>
+<option value="198">E. OF MORNINGSIDE:401DE0390DWC</option>
+<option value="199">E. OF MORNINGSIDE:401DE0390DWE</option>
+<option value="200">E. OF NEILSON:401DE0390DEC</option>
+<option value="201">E. OF NEILSON:401DE0400DEC</option>
+<option value="202">E. OF NEILSON:401DE0410DEC</option>
+<option value="203">E. OF NEILSON:401DE0410DEE</option>
+<option value="204">E. OF NEILSON:401DE0420DEE</option>
+<option value="205">E. OF PORT UNION:401DE0210DET</option>
+<option value="206">E. OF PORT UNION:401DE0220DWT</option>
+<option value="207">E. OF PORT UNION:401DE0470DWC</option>
+<option value="208">E. OF PORT UNION:401DE0470DWE</option>
+<option value="209">E. OF PORT UNION:401DE0500DEC</option>
+<option value="210">E. OF PORT UNION:401DE0520DEE</option>
+<option value="211">E. OF QEW or 403 SPLIT     :QEWDE0320DES</option>
+<option value="212">E OF RENFORTH:401DW0100DWS</option>
+<option value="213">E OF RENFORTH DR:401DW0080DES</option>
+<option value="214">E. OF ROYAL WINDSOR     :QEWDE0300DWS</option>
+<option value="215">E. OF SOUTHDOWN         :QEWDE0400DES</option>
+<option value="216">E. OF SOUTHDOWN         :QEWDE0400DWS</option>
+<option value="217">E. OF THIRD LINE        :QEWDE0200DWS</option>
+<option value="218">E. OF TOMKEN:401DW0190DEC</option>
+<option value="219">E. OF TOMKEN:401DW0280DEE</option>
+<option value="220">E of Victoria Park:401DE0260DEC</option>
+<option value="221">E. OF WALKERS           :QEWDE0070DWS</option>
+<option value="222">E OF WARDEN:401DE0090DET</option>
+<option value="223">E OF WESTON:401DW0060DEC</option>
+<option value="224">E OF WESTON:401DW0060DWC</option>
+<option value="225">E. OF WHITES:401DE0240DET</option>
+<option value="226">E. OF WHITES:401DE0520DWC</option>
+<option value="227">E. OF WHITES:401DE0520DWE</option>
+<option value="228">E. OF WHITES:401DE0540DEC</option>
+<option value="229">E. OF WHITES:401DE0550DEC</option>
+<option value="230">E. OF WHITES:401DE0560DEE</option>
+<option value="231">E. OF WHITES:401DE0570DEE</option>
+<option value="232">E OF YONGE:401DE0130DWC</option>
+<option value="233">ERIN MILLS SB - QEW WB  :QEWDE0225DWR</option>
+<option value="234">FAIRVIEW EB - QEW SB    :QEWDN0040DNR</option>
+<option value="235">FAIRVIEW WB - QEW SB    :QEWDN0050DNR</option>
+<option value="236">FINCH - 404 SB:404DN0040DSR</option>
+<option value="237">Finch E. - 400 S.:400DN0010DSR</option>
+<option value="238">FINCH EAST - 400 N:400DN0020DNR</option>
+<option value="239">FINCH W - 400 N:400DN0030DNR</option>
+<option value="240">Finch W. - 400s.:400DN0020DSR</option>
+<option value="241">FINCH WEST - 404 NB:404DN0050DNR</option>
+<option value="242">FORD NB - QEW WB        :QEWDE0205DWR</option>
+<option value="243">FOURTH LINE             :QEWDE0221DES</option>
+<option value="244">FROM WEST MALL          :QEWDE0500DWR</option>
+<option value="245">GUELPH LINE             :QEWDE0030DES</option>
+<option value="246">GUELPH LINE TO QEW WEST :QEWDE0060DWR</option>
+<option value="247">HOV AT 407TER:404DN0081DNH</option>
+<option value="248">HOV AT JOHN:404DN0081DSH</option>
+<option value="249">HOV AT MCNICOLL:404DN0041DNH</option>
+<option value="250">HOV AT MCNICOLL:404DN0041DSH</option>
+<option value="251">HOV AT STEELE:404DN0071DSH</option>
+<option value="252">HOV AT STEELES:404DN0051DNH</option>
+<option value="253">HOV AT VANHORNE:404DN0011DNH</option>
+<option value="254">HOV AT VAN HORNE:404DN0011DSH</option>
+<option value="255">HOV NORTH OF 407ETR:404DN0091DNH</option>
+<option value="256">HOV NORTH OF 407ETR:404DN0101DNH</option>
+<option value="257">HOV NORTH OF JOHN:404DN0071DNH</option>
+<option value="258">HOV NORTH OF STEELES:404DN0061DNH</option>
+<option value="259">HOV SOUTH OF 407ETR:404DN0091DSH</option>
+<option value="260">HOV SOUTH OF STEELES:404DN0061DSH</option>
+<option value="261">HOV SOUTH OF WOODBINE:404DN0051DSH</option>
+<option value="262">HWY 10 SB - QEW WB      :QEWDE0260DWR</option>
+<option value="263">HWY2-401WB:401DE1280DWR</option>
+<option value="264">HWY27 S. S.0F 401:401DW0410DSR</option>
+<option value="265">HWY 2 EB - QEW NB       :QEWDN0020DNR</option>
+<option value="266">HWY 2 WB - QEW NB       :QEWDN0010DNR</option>
+<option value="267">HWY 403 SB - QEW WB     :QEWDE0400DWR</option>
+<option value="268">Hwy 404 N of 401:401DE0030DSF</option>
+<option value="269">Hwy 404 N of 401:401DE0040DNF</option>
+<option value="270">HWY 427 NB:401DW0040DNF</option>
+<option value="271">HWY 427 NB:401DW0060DNF</option>
+<option value="272">HWY 427 N. N.0F 401:401DW0080DNF</option>
+<option value="273">Hwy 7 - 400NB:400DN0060DNR</option>
+<option value="274">HWY 7 - 404 NB:404DN0100DNR</option>
+<option value="275">HWY 7 - 404 NB:404DN0110DNR</option>
+<option value="276">Hwy 7 W. - 400S.:400DN0070DSR</option>
+<option value="277">Hwy 7 West - 400 NB:400DN0070DNR</option>
+<option value="278">Hwy E. - 400 S.:400DN0060DSR</option>
+<option value="279">KENNEDY SB - 401 EB:401DE0780DER</option>
+<option value="280">KENNEDY SB - 401 WB:401DE0760DWR</option>
+<option value="281">KINGSTON ROAD:401DE0470DEC</option>
+<option value="282">KINGSTON ROAD:401DE0480DEC</option>
+<option value="283">KINGSTON ROAD:401DE0490DEE</option>
+<option value="284">KINGSTON ROAD:401DE0500DEE</option>
+<option value="285">KINGSTON-WB 401:401DE1160DWR</option>
+<option value="286">Langstaff E.- 400 S.:400DN0090DSR</option>
+<option value="287">Langstaff W - 400 S.:400DN0100DSR</option>
+<option value="288">LIVERPOOL:401DE0550DWC</option>
+<option value="289">LIVERPOOL:401DE0550DWE</option>
+<option value="290">LIVERPOOL ROAD:401DE0570DEC</option>
+<option value="291">MARKHAM NB - 401 EB:401DE0960DER</option>
+<option value="292">MARKHAM NB - 401 WB:401DE0950DWR</option>
+<option value="293">MARKHAM SB - 401 WB:401DE0930DWR</option>
+<option value="294">MCCOWAN SB - 401 EB:401DE0860DER</option>
+<option value="295">MCCOWAN SB - 401 WB:401DE0870DWR</option>
+<option value="296">MORININGSIDE SB - 401 WB:401DE1040DWR</option>
+<option value="297">N ALLEN - YORKDALE:401DE0160DSR</option>
+<option value="298">n Bayview - 401 e:401DE0460DER</option>
+<option value="299">N Bayview - 401 w:401DE0440DWR</option>
+<option value="300">NB BURLOAK-WB QEW       :QEWDE0120DWR</option>
+<option value="301">NB ERIN MILLS-WB QEW    :QEWDE0230DWR</option>
+<option value="302">NB LIVERPOOL-401WB:401DE1310DWR</option>
+<option value="303">NB MORNINGSIDE-401WB:401DE1070DWR</option>
+<option value="304">NB WHITES-401WB:401DE1260DWR</option>
+<option value="305">NB WHITES - EB 401:401DE1270DER</option>
+<option value="306">N. CARLINGVIEW-HWY 401 E:401DW0360DER</option>
+<option value="307">NEAR ETOBICOKE CREEK:401DW0240DEE</option>
+<option value="308">NEAR HWY 27:401DW0060DES</option>
+<option value="309">NEAR LAKE AVE           :QEWDS0140DSS</option>
+<option value="310">NEAR MEADOWVALE:401DE0200DWT</option>
+<option value="311">NEAR MEADOWVALE:401DE0430DWC</option>
+<option value="312">NEAR MORNINGSIDE:401DE0180DWT</option>
+<option value="313">NEAR MORNINGSIDE:401DE0400DWC</option>
+<option value="314">NEAR MORNINGSIDE:401DE0400DWE</option>
+<option value="315">N-E DIXIE RAMP:401DW0461DER</option>
+<option value="316">NEILSON - 401 EB:401DE1010DER</option>
+<option value="317">NEILSON NB - 401 WB:401DE1000DWR</option>
+<option value="318">N Hwy 404 - 401 e:401DE0650DER</option>
+<option value="319">N Hwy 404 - 401 W:401DE0600DWR</option>
+<option value="320">N. HWY 427-EGLINTON E.:401DW0050DER</option>
+<option value="321">N Leslie - 401 E:401DE0510DER</option>
+<option value="322">N Leslie - 401 W:401DE0500DWR</option>
+<option value="323">N.of 407:400DN0010DSE</option>
+<option value="324">N OF EGLINTON:410DW0030DNE</option>
+<option value="325">N. of Finch:400DN0080DSS</option>
+<option value="326">N. of Hwy 7:400DN0030DSE</option>
+<option value="327">North of 407:400DN0010DNC</option>
+<option value="328">NORTH OF 407ETR:404DN0090DNS</option>
+<option value="329">North of Hwy 401:400DN0010DNS</option>
+<option value="330">North of Hwy 7:400DN0040DNC</option>
+<option value="331">NORTH OF HWY 7:404DN0110DNS</option>
+<option value="332">North of Steeles:400DN0100DNS</option>
+<option value="333">North of Steeles/CN Rail:400DN0110DNS</option>
+<option value="334">N Victoria Park - 401 w:401DE0690DWR</option>
+<option value="335">N Warden - 401 E:401DE0750DER</option>
+<option value="336">N-W DIXIE RAMP:401DW0440DWR</option>
+<option value="337">PORT UNION:401DE0460DWC</option>
+<option value="338">PORT UNION:401DE0460DWE</option>
+<option value="339">PORT UNION:401DE0490DEC</option>
+<option value="340">PORT UNION:401DE0510DEE</option>
+<option value="341">PORT UNION - 401 EB:401DE1220DER</option>
+<option value="342">PORT UNION - 401 WB:401DE1190DWR</option>
+<option value="343">QEW NB - 403 WB         :QEWDN0070DNR</option>
+<option value="344">QEW NORTH OF CMS 4      :QEWDS0050DNS</option>
+<option value="345">QEW SB AT FREEMAN       :QEWDN0040DSS</option>
+<option value="346">QEW SB - WOODWARD       :QEWDS0030DWR</option>
+<option value="347">RAMP 401E - 400S:401DW0040DSR</option>
+<option value="348">RAMP 401EC - AVENUE S:401DE0310DSR</option>
+<option value="349">RAMP E401 - 409W:401DW0210DSR</option>
+<option value="350">RAMP E401 - 409W:401DW0220DSR</option>
+<option value="351">RAMP E 401 - ALLEN:401DE0180DNR</option>
+<option value="352">RAMP E 401 - ALLEN S:401DE0200DSR</option>
+<option value="353">RAMP E 401 - BATHURST:401DE0280DNR</option>
+<option value="354">RAMP E401 - DIXON RD:401DW0280DNR</option>
+<option value="355">RAMP E 401 - ISLINGTON:401DW0200DSR</option>
+<option value="356">RAMP E 401WE - 409W:401DW0180DWR</option>
+<option value="357">RAMP E401 - WESTON:401DW0110DNR</option>
+<option value="358">RAMP E.EGLINTON-HWY27 S.:401DW0400DSR</option>
+<option value="359">RAMP N 400 - 401EC:401DW0020DER</option>
+<option value="360">RAMP N.427-EGLINTON E.:401DW0090DER</option>
+<option value="361">RAMP N ALLEN - 401WC:401DE0120DWR</option>
+<option value="362">RAMP N AVENUE - 401E:401DE0320DER</option>
+<option value="363">RAMP N AVENUE - 401W:401DE0300DWR</option>
+<option value="364">RAMP N DIXON RD - 401:401DW0300DER</option>
+<option value="365">RAMP N WESTON - 401EC:401DW0140DER</option>
+<option value="366">RAMP S 400 - 401EC:401DW0010DER</option>
+<option value="367">RAMP S ALLEN - 401:401DE0230DER</option>
+<option value="368">RAMP S ALLEN - 401WC:401DE0110DWR</option>
+<option value="369">RAMP S AVENUE - 401E:401DE0340DER</option>
+<option value="370">RAMP S AVENUE - 401W:401DE0330DWR</option>
+<option value="371">RAMP S DIXON RD - 401:401DW0270DER</option>
+<option value="372">RAMP S DUFFERIN 401WC:401DE0080DWR</option>
+<option value="373">RAMP S DUFFERIN - 401WC:401DE0090DWR</option>
+<option value="374">RAMP S KEELE - 401WC:401DE0040DWR</option>
+<option value="375">RAMP S YONGE - 401W:401DE0380DWR</option>
+<option value="376">RAMP TO DIXIE:401DW0471DER</option>
+<option value="377">RAMP W401 - 400N:401DW0100DNR</option>
+<option value="378">RAMP W401 - DIXON RD:401DW0310DSR</option>
+<option value="379">RAMP W401 - DUFFERIN S:401DE0070DSR</option>
+<option value="380">RAMP W401 - KEELE S:401DE0020DSR</option>
+<option value="381">RAMP W.401-RENFORTH AVE.:401DW0440DER</option>
+<option value="382">RAMP YORKDALE - 401:401DE0240DER</option>
+<option value="383">RAMP YORKDALE - ALLEN:401DE0170DNR</option>
+<option value="384">RHCE/HWY20 - QEW SB     :QEWDS0080DSR</option>
+<option value="385">ROUGEMOUNT:401DE0490DWC</option>
+<option value="386">ROUGEMOUNT:401DE0490DWE</option>
+<option value="387">ROUGE RIVER:401DE0480DWE</option>
+<option value="388">ROUGHMOUNT:401DE0520DEC</option>
+<option value="389">ROYAL WINDSOR NB-QEW WB :QEWDE0190DWR</option>
+<option value="390">ROYAL WINSOR DRIVE      :QEWDE0290DWS</option>
+<option value="391">SB410COL - CAWTHRA:410DW0110DSR</option>
+<option value="392">S Bayview - 401 e:401DE0430DER</option>
+<option value="393">SB BROCK - 401WB:401DE1340DWR</option>
+<option value="394">SB COLL. TO QEW SB      :QEWDS0010DSR</option>
+<option value="395">SB DORVAL - EB QEW      :QEWDE0150DER</option>
+<option value="396">SB DORVAL - WB QEW      :QEWDE0150DWR</option>
+<option value="397">SB GUELPH-EB QEW        :QEWDE0050DER</option>
+<option value="398">SB LIVERPOOL-401WB:401DE1300DWR</option>
+<option value="399">SB MEADOWVALE-401WB:401DE1090DWR</option>
+<option value="400">SB PORT UNION-401EB:401DE1180DER</option>
+<option value="401">SB QEW - CENTENNIAL PKWY:QEWDS0070DSR</option>
+<option value="402">SB QEW - RHCE           :QEWDS0045DSR</option>
+<option value="403">SB TRAFALGAR - WB QEW   :QEWDE0170DWR</option>
+<option value="404">SB WALKERS-EB QEW       :QEWDE0070DER</option>
+<option value="405">SB WALKERS-WB QEW       :QEWDE0070DWR</option>
+<option value="406">SB WHITES-401WB:401DE1240DWR</option>
+<option value="407">SB WHITES-EB 401:401DE1250DER</option>
+<option value="408">S DIXON RD - 401:401DW0290DWR</option>
+<option value="409">S DVP - 401 E:401DE0550DER</option>
+<option value="410">S DVP - 401 W:401DE0530DWR</option>
+<option value="411">S DVP - 401 W:401DE0539DWR</option>
+<option value="412">S DVP - 401 W:401DE0540DWR</option>
+<option value="413">S DVP - 401 W:401DE0541DWR</option>
+<option value="414">S-E DIXIE RAMP:401DW0451DER</option>
+<option value="415">SERV ROAD - SB QEW      :QEWDS0020DSR</option>
+<option value="416">SHEPPARD - 404 SB:404DN0010DSR</option>
+<option value="417">SHEPPART - 404 NB:404DN0020DNR</option>
+<option value="418">S. HWY 427 - HWY 401 E.:401DW0340DER</option>
+<option value="419">S. HWY 427 - HWY 401 W.:401DW0360DWR</option>
+<option value="420">S Leslie - 401 E:401DE0490DER</option>
+<option value="421">S Leslie - 401 W:401DE0470DWR</option>
+<option value="422">S OF 401:410DW0010DSC</option>
+<option value="423">S. of 401 Exit:400DN0005DSS</option>
+<option value="424">S. of 407:400DN0120DSS</option>
+<option value="425">S. OF BRANT             :QEWDN0060DNS</option>
+<option value="426">S. OF BRANT             :QEWDN0060DSS</option>
+<option value="427">S. OF CENTENNIAL PKWY   :QEWDS0130DSS</option>
+<option value="428">S. OF EGLINTON:410DW1040DNS</option>
+<option value="429">S. OF FAIRVIEW          :QEWDN0020DSS</option>
+<option value="430">S. of Finch:400DN0060DSS</option>
+<option value="431">S. OF HWY 2             :QEWDS0010DNS</option>
+<option value="432">S. of Langstaff:400DN0040DSE</option>
+<option value="433">S. of Langstaff:400DN0050DSC</option>
+<option value="434">S OF MATHESON:410DW0020DSC</option>
+<option value="435">S. of Sheppard:400DN0020DSS</option>
+<option value="436">S. of Steeles:400DN0090DSS</option>
+<option value="437">S. of Steeles:400DN0100DSS</option>
+<option value="438">South of 407:400DN0080DNS</option>
+<option value="439">SOUTH OF CENTENNIAL     :QEWDS0130DNS</option>
+<option value="440">SOUTH OF FINCH:400DN0061DSS</option>
+<option value="441">South of Langstaff:400DN0050DNC</option>
+<option value="442">SOUTH OF STEELES:404DN0060DSS</option>
+<option value="443">SOUTH OF WOODBINE:404DN0050DSS</option>
+<option value="444">Steeles - 400 S.:400DN0040DSR</option>
+<option value="445">STEELES - 404 NB:404DN0070DNR</option>
+<option value="446">STEELES - 404 NB:404DN0080DNR</option>
+<option value="447">STEELES - 404 SB:404DN0080DSR</option>
+<option value="448">S Victoria Park - 401 E:401DE0680DER</option>
+<option value="449">S-W DIXIE RAMP:401DW0450DWR</option>
+<option value="450">THIRD LINE-EB QEW       :QEWDE0140DER</option>
+<option value="451">THIRD LINE              :QEWDE0191DWS</option>
+<option value="452">THIRD LINE - QEW        :QEWDE0135DER</option>
+<option value="453">THIRD LINE-WB QEW       :QEWDE0140DWR</option>
+<option value="454">TO DIXIE                :QEWDE0490DWR</option>
+<option value="455">TO EGLINTON:401DW0380DER</option>
+<option value="456">TO HWY 10 SOUTH         :QEWDE0450DSR</option>
+<option value="457">TO HWY 427              :QEWDE0510DNR</option>
+<option value="458">TO WCB                  :QEWDE0420DSR</option>
+<option value="459">TRAFALGAR               :QEWDE0260DWS</option>
+<option value="460">TRAFALGAR               :QEWDE0261DES</option>
+<option value="461">TRAFALGAR               :QEWDE0261DWS</option>
+<option value="462">TRANSFER(EXP TO COL):401DW0030DWT</option>
+<option value="463">W00DBINE - 404 SB:404DN0060DSR</option>
+<option value="464">w 401 - Bayview N:401DE0450DNR</option>
+<option value="465">W 401 - DVP s:401DE0630DSR</option>
+<option value="466">W 401 - DVP S:401DE0640DSR</option>
+<option value="467">W 401 - Hwy 404 N:401DE0610DNR</option>
+<option value="468">W 401 - Hwy 404 N:401DE0620DNR</option>
+<option value="469">W 401 - Leslie N/S:401DE0520DNR</option>
+<option value="470">WALKERS LINE            :QEWDE0061DES</option>
+<option value="471">WARDEN SB - 401 WB:401DE0720DWR</option>
+<option value="472">WB401EXP - SB410EXP:410DW0070DSR</option>
+<option value="473">WB401-HWY 2:401DE1290DNR</option>
+<option value="474">WB401-LIVERPOOL:401DE1320DNR</option>
+<option value="475">WB QEW- BRONTE          :QEWDE0360DNR</option>
+<option value="476">WB QEW - CAWTHRA        :QEWDE0480DNR</option>
+<option value="477">WB QEW - DORVAL         :QEWDE0390DNR</option>
+<option value="478">WB QEW-GUELPH LINE      :QEWDE0310DNR</option>
+<option value="479">WB QEW-WALKERS LINE     :QEWDE0320DNR</option>
+<option value="480">WCB NB - QEW WB         :QEWDE0220DWR</option>
+<option value="481">WCB SB - QEW WB         :QEWDE0210DWR</option>
+<option value="482">WEST OF FORD DRIVE      :QEWDE0310DWS</option>
+<option value="483">WEST OF ROYAL WINDSOR   :QEWDE0280DWS</option>
+<option value="484">WHITES:401DE0510DWC</option>
+<option value="485">WHITES:401DE0510DWE</option>
+<option value="486">WHITES ROAD:401DE0530DEC</option>
+<option value="487">WHITES ROAD:401DE0550DEE</option>
+<option value="488">W. HWY 401-HWY 427 N.:401DW0430DNR</option>
+<option value="489">W OF 400:401DW0050DEC</option>
+<option value="490">W OF 400:401DW0050DEE</option>
+<option value="491">W OF 400:401DW0090DSR</option>
+<option value="492">W of 404/DVP:401DE0190DWE</option>
+<option value="493">W OF ALLEN:401DE0010DWT</option>
+<option value="494">W OF ALLEN ROAD:401DE0060DEC</option>
+<option value="495">W OF AVENUE ROAD:401DE0100DEC</option>
+<option value="496">W OF AVENUE ROAD:401DE0100DEE</option>
+<option value="497">W OF BATHURST:401DE0080DEC</option>
+<option value="498">W of Bayview:401DE0150DWC</option>
+<option value="499">W of Bayview:401DE0160DEC</option>
+<option value="500">W. OF BROCK:401DE0560DWC</option>
+<option value="501">W. OF BROCK:401DE0560DWE</option>
+<option value="502">W. OF BRONTE            :QEWDE0140DWS</option>
+<option value="503">W. OF DIXIE:401DW0170DWC</option>
+<option value="504">W. OF DIXIE:401DW0270DWE</option>
+<option value="505">W OF DUFFERIN:401DE0040DEE</option>
+<option value="506">W OF DUFFERIN:401DE0040DWC</option>
+<option value="507">W OF DUFFERIN:401DE0050DEC</option>
+<option value="508">W. OF ETOBICOKE CREEK:401DW0150DWC</option>
+<option value="509">W OF HWY 27:401DW0080DWS</option>
+<option value="510">W of Hwy 404/DVP:401DE0080DWT</option>
+<option value="511">W of Hwy 404/DVP:401DE0190DWC</option>
+<option value="512">W of Hwy 404/DVP:401DE0200DWE</option>
+<option value="513">W of Hwy 404/DVP:401DE0210DWE</option>
+<option value="514">W OF KEELE:401DE0010DEE</option>
+<option value="515">W OF KEELE:401DW0010DEC</option>
+<option value="516">W. OF KENNEDY:401DE0290DEC</option>
+<option value="517">W. OF KENNEDY:401DE0290DEE</option>
+<option value="518">W OF KIPLING:401DW0020DWS</option>
+<option value="519">W OF KIPLING:401DW0030DWS</option>
+<option value="520">W of Leslie:401DE0180DWC</option>
+<option value="521">W. OF MARKHAM:401DE0330DWC</option>
+<option value="522">W. OF MARKHAM:401DE0330DWE</option>
+<option value="523">W. OF MEADOWVALE:401DE0420DWC</option>
+<option value="524">W. OF MEADOWVALE:401DE0420DWE</option>
+<option value="525">W. OF MEADOWVALE:401DE0440DEC</option>
+<option value="526">W. OF MISSISSAUGA RD:QEWDE0410DES</option>
+<option value="527">W. OF MISSISSAUGA RD:QEWDE0420DES</option>
+<option value="528">W. OF NEILSON:401DE0360DWC</option>
+<option value="529">W. OF NEILSON:401DE0360DWE</option>
+<option value="530">W. OF RENFORTH:401DW0110DWC</option>
+<option value="531">W. OF RENFORTH:401DW0120DEC</option>
+<option value="532">W. OF RENFORTH:401DW0200DWE</option>
+<option value="533">W. OF RENFORTH:401DW0210DEE</option>
+<option value="534">W. OF ROUGHMOUNT:401DE0510DE</option>
+<option value="535">W. OF ROUGHMOUNT:401DE0510DEC</option>
+<option value="536">W. OF SOUTHDOWN         :QEWDE0360DES</option>
+<option value="537">W. OF SOUTHDOWN         :QEWDE0360DWS</option>
+<option value="538">W. OF THIRD LINE        :QEWDE0180DWS</option>
+<option value="539">W. OF THIRD LINE        :QEWDE0190DWS</option>
+<option value="540">W of Victoria Park:401DE0220DWC</option>
+<option value="541">W of Victoria Park:401DE0230DWC</option>
+<option value="542">W of Warden:401DE0240DWC</option>
+<option value="543">W of Warden:401DE0260DWC</option>
+<option value="544">W OF WARDEN:401DE0260DWE</option>
+<option value="545">W. OF WCB               :QEWDE0340DWS</option>
+<option value="546">W OF WESTON:401DW0070DEC</option>
+<option value="547">W OF WESTON:401DW0070DEE</option>
+<option value="548">W OF WESTON:401DW0080DEC</option>
+<option value="549">W. OF WHITES:401DE0500DWC</option>
+<option value="550">W. OF WHITES:401DE0500DWE</option>
+<option value="551">W OF YONGE:401DE0120DEC</option>
+<option value="552">W OF YONGE:401DE0120DWE</option>
+                        </select>
+                    </div>
+                </div>
+                <!--<div class="div_mid">
+                    <h3>Frequency</h3>
+                    <select class = "btn purple" id="rx_freq">
+                        <option value="Hourly">Hourly</option>
+                        <option value="Daily">Daily</option>
+                        <option value="Weekly">Weekly</option>
+                        <option value="Monthly">Monthly</option>
+                    </select>
+                </div>-->
+                <div class="div_right">
+                    <h3>Select range of times change</h3>
+                    <input class="btn orange timepicker" style="width: 120px;" id="rx_date1"> to <input class="btn yellow timepicker" style="width: 120px;" id="rx_date2">
+                    <input class="btn green" type="button" id="rx_go" value="Go">
+                </div>
+
+        </div>
+
+        <div class="boxborder" id="ex_analytics" style="display: none;">
+                <h2>Exit Analytics</h2>
+                <div class="div_left">
+                    <h3>Select Exit Point</h3>
+                    <div class="div_inline"><input class="btn blue"id="ex_input"></div>
+                    <div class="div_inline">
+                        <select class = "btn red" id="ex_select">
+                            <option value="1">400: Exit 25 S</option>
+                            <option value="2">400: Exit 25 N</option>
+                            <option value="3">401: Exit 351</option>l
+                            <option value="4">401: Exit 352</option>
+                            <option value="5">401: Exit 354</option>
+                            <option value="6">401: Exit 356</option>
+                            <option value="7">401: Exit 357</option>
+                            <option value="8">401: Exit 359 W</option>l
+                            <option value="9">401: Exit 359 E</option>
+                            <option value="10">401: Exit 362</option>
+                            <option value="11">401: Exit 366</option>
+                            <option value="12">401: Exit 367</option>
+                            <option value="13">401: Exit 369</option>l
+                            <option value="14">401: Exit 371 E</option>
+                            <option value="15">401: Exit 371 W</option>
+                            <option value="16">401: Exit 373</option>
+                            <option value="17">401: Exit 375</option>
+                            <option value="18">401: Exit 376</option>l
+                            <option value="19">401: Exit 379 E</option>
+                            <option value="20">401: Exit 379 W</option>
+                            <option value="21">401: Exit 383</option>
+                            <option value="22">401: Exit 387</option>
+                            <option value="23">401: Exit 389</option>l
+                            <option value="24">401: Exit 392</option>
+                            <option value="25">404: Exit 20</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="div_mid">
+                    <h3>Frequency</h3>
+                    <select class = "btn purple" id="ex_freq">
+                        <option value="Hourly">Hourly</option>
+                        <option value="Daily">Daily</option>
+                        <option value="Weekly">Weekly</option>
+                        <option value="Monthly">Monthly</option>
+                    </select>
+                </div>
+                <div class="div_right">
+                    <h3>Select range of dates</h3>
+                    <input class="btn orange datepicker" style="width: 120px;" id="ex_date1"> to <input class="btn yellow datepicker" style="width: 120px;" id="ex_date2">
+                    <input class="btn green" type="button" id="ex_go" value="Go">
+                </div>
+        </div>
+        <div id="result_show" style="display: none;">
+                <div id="result_title"></div>
+                <div id="output"></div>            
+        </div>
+
+    </div>
+		<div class="footer-sticky" style="display: none">
+        	<footer>
+				<p><a href="http://portal.cvst.ca/">CVST Live Traffic Beta</a><br />
+                       Site made by Team 391</p>
+			</footer> 
+		</div>
+</body>
+</html>
+
+                  	<div class="box"></div>                  
